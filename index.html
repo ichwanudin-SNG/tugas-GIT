@@ -9,3 +9,63 @@
     <p>Ini tugas pertama saya menggunakan Git.</p>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Pencarian Langsung</title>
+    <style>
+        body {font-family:sans-serif; max-width:600px; margin:2rem auto; padding:0 1rem;}
+        input {width:100%; padding:0.8rem; font-size:1rem; margin-bottom:1rem;}
+        .item {padding:0.8rem 0; border-bottom:1px solid #ddd;}
+        .nama {font-weight:bold;}
+    </style>
+</head>
+<body>
+    <h1>Daftar Teknologi</h1>
+    <input type="text" id="cari" placeholder="Cari...">
+    <div id="daftar"></div>
+
+    <script>
+        const data = [
+            {nama:'HTML', desk:'Struktur halaman web'},
+            {nama:'CSS', desk:'Tata letak & tampilan'},
+            {nama:'JavaScript', desk:'Interaksi di halaman'},
+            {nama:'PHP', desk:'Pemrograman sisi server'},
+            {nama:'MySQL', desk:'Penyimpanan data'},
+            {nama:'Git', desk:'Kendali versi kode'}
+        ];
+
+        const input = document.getElementById('cari');
+        const daftar = document.getElementById('daftar');
+
+        function tampil(hasil) {
+            daftar.textContent = '';
+            if (!hasil.length) {
+                const p = document.createElement('p');
+                p.textContent = 'Tidak ditemukan';
+                daftar.appendChild(p);
+                return;
+            }
+            hasil.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                const n = document.createElement('div');
+                n.className = 'nama'; n.textContent = item.nama;
+                const d = document.createElement('div');
+                d.textContent = item.desk;
+                div.appendChild(n); div.appendChild(d);
+                daftar.appendChild(div);
+            });
+        }
+
+        tampil(data);
+        input.addEventListener('input', () => {
+            const k = input.value.trim().toLowerCase();
+            tampil(data.filter(i => 
+                i.nama.toLowerCase().includes(k) || i.desk.toLowerCase().includes(k)
+            ));
+        });
+    </script>
+</body>
+</html>
