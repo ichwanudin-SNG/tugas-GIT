@@ -13,58 +13,134 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Pencarian Langsung</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Teknologi — Pencarian Langsung</title>
     <style>
-        body {font-family:sans-serif; max-width:600px; margin:2rem auto; padding:0 1rem;}
-        input {width:100%; padding:0.8rem; font-size:1rem; margin-bottom:1rem;}
-        .item {padding:0.8rem 0; border-bottom:1px solid #ddd;}
-        .nama {font-weight:bold;}
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 650px;
+            margin: 3rem auto;
+            padding: 0 1.25rem;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        h1 {
+            text-align: center;
+            color: #2d3748;
+        }
+        .kotak-cari {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+        .kotak-cari:focus {
+            outline: none;
+            border-color: #3182ce;
+        }
+        .daftar-item {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        .item {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .nama {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #2b6cb0;
+            margin-bottom: 0.3rem;
+        }
+        .deskripsi {
+            font-size: 0.9rem;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+        .pesan-kosong {
+            padding: 2rem;
+            text-align: center;
+            color: #718096;
+        }
     </style>
 </head>
 <body>
-    <h1>Daftar Teknologi</h1>
-    <input type="text" id="cari" placeholder="Cari...">
-    <div id="daftar"></div>
+    <h1>Daftar Teknologi Pemrograman</h1>
+    <input type="text" id="kolomCari" class="kotak-cari" placeholder="Ketik nama atau keterangan untuk mencari...">
+    <div id="wadahDaftar" class="daftar-item"></div>
 
     <script>
-        const data = [
-            {nama:'HTML', desk:'Struktur halaman web'},
-            {nama:'CSS', desk:'Tata letak & tampilan'},
-            {nama:'JavaScript', desk:'Interaksi di halaman'},
-            {nama:'PHP', desk:'Pemrograman sisi server'},
-            {nama:'MySQL', desk:'Penyimpanan data'},
-            {nama:'Git', desk:'Kendali versi kode'}
+        // Data yang akan ditampilkan
+        const daftarData = [
+            { nama: 'HTML', deskripsi: 'Bahasa penandaan standar untuk menyusun struktur halaman web' },
+            { nama: 'CSS', deskripsi: 'Bahasa lembar gaya untuk mengatur tampilan, warna, dan tata letak halaman' },
+            { nama: 'JavaScript', deskripsi: 'Bahasa pemrograman yang membuat halaman web menjadi dinamis dan interaktif' },
+            { nama: 'PHP', deskripsi: 'Bahasa pemrograman yang berjalan di sisi peladen untuk mengelola data dan logika aplikasi' },
+            { nama: 'MySQL', deskripsi: 'Sistem pengelola basis data yang digunakan untuk menyimpan dan mengelola informasi secara terstruktur' },
+            { nama: 'React', deskripsi: 'Pustaka kode JavaScript untuk membangun antarmuka pengguna aplikasi web yang cepat dan responsif' },
+            { nama: 'Git', deskripsi: 'Alat pengendalian versi yang melacak perubahan pada kode sumber proyek perangkat lunak' },
+            { nama: 'REST API', deskripsi: 'Aturan pertukaran data antar sistem komputer yang sederhana dan dapat diakses melalui jaringan' },
+            { nama: 'Node.js', deskripsi: 'Lingkungan kerja yang memungkinkan penulisan kode JavaScript di sisi peladen' },
+            { nama: 'JSON', deskripsi: 'Format pertukaran data yang ringan, mudah dibaca oleh manusia, dan umum digunakan antar aplikasi' }
         ];
 
-        const input = document.getElementById('cari');
-        const daftar = document.getElementById('daftar');
+        const kolomCari = document.getElementById('kolomCari');
+        const wadahDaftar = document.getElementById('wadahDaftar');
 
-        function tampil(hasil) {
-            daftar.textContent = '';
-            if (!hasil.length) {
-                const p = document.createElement('p');
-                p.textContent = 'Tidak ditemukan';
-                daftar.appendChild(p);
+        // Fungsi menyusun ulang tampilan daftar
+        function tampilkanHasil(daftarYangDitampilkan) {
+            // Kosongkan wadah terlebih dahulu
+            wadahDaftar.textContent = '';
+
+            if (daftarYangDitampilkan.length === 0) {
+                const pesan = document.createElement('div');
+                pesan.className = 'pesan-kosong';
+                pesan.textContent = 'Tidak ditemukan data yang sesuai dengan kata kunci pencarian.';
+                wadahDaftar.appendChild(pesan);
                 return;
             }
-            hasil.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'item';
-                const n = document.createElement('div');
-                n.className = 'nama'; n.textContent = item.nama;
-                const d = document.createElement('div');
-                d.textContent = item.desk;
-                div.appendChild(n); div.appendChild(d);
-                daftar.appendChild(div);
+
+            daftarYangDitampilkan.forEach(barisData => {
+                const elemenBaris = document.createElement('div');
+                elemenBaris.className = 'item';
+
+                const elemenNama = document.createElement('div');
+                elemenNama.className = 'nama';
+                elemenNama.textContent = barisData.nama;
+
+                const elemenDeskripsi = document.createElement('div');
+                elemenDeskripsi.className = 'deskripsi';
+                elemenDeskripsi.textContent = barisData.deskripsi;
+
+                elemenBaris.appendChild(elemenNama);
+                elemenBaris.appendChild(elemenDeskripsi);
+                wadahDaftar.appendChild(elemenBaris);
             });
         }
 
-        tampil(data);
-        input.addEventListener('input', () => {
-            const k = input.value.trim().toLowerCase();
-            tampil(data.filter(i => 
-                i.nama.toLowerCase().includes(k) || i.desk.toLowerCase().includes(k)
-            ));
+        // Tampilkan semua data saat halaman pertama kali dimuat
+        tampilkanHasil(daftarData);
+
+        // Tangkap setiap perubahan teks di kolom pencarian
+        kolomCari.addEventListener('input', function () {
+            const kataKunci = kolomCari.value.trim().toLowerCase();
+
+            const hasilSaring = daftarData.filter(item => {
+                const cocokNama = item.nama.toLowerCase().includes(kataKunci);
+                const cocokDeskripsi = item.deskripsi.toLowerCase().includes(kataKunci);
+                return cocokNama || cocokDeskripsi;
+            });
+
+            tampilkanHasil(hasilSaring);
         });
     </script>
 </body>
